@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-
-namespace ApiCatalogo.Models;
+﻿namespace ApiCatalogo.Models;
 
 public class Produto
 {
