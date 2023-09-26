@@ -20,14 +20,15 @@ var app = builder.Build();
 // ---------------------------------------- ENDPOINTS ----------------------------------------
 app.MapGet("/", () => $"Catálogo de Produtos - {DateTime.Now.Year}");
 
-app.MapPost("/categorias", async(Categoria categoria, AppDbContext db) => 
-{ 
+app.MapPost("/categorias", async (Categoria categoria, AppDbContext db) =>
+{
     db.Categorias.Add(categoria);
     await db.SaveChangesAsync();
 
     return Results.Created($"/categorias/{categoria.CategoriaId}", categoria);
 });
 
+app.MapGet("/categorias", async (AppDbContext db) => await db.Categorias.ToListAsync());
 
 
 
