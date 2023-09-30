@@ -1,4 +1,5 @@
 using ApiCatalogo.ApiEndpoints;
+using ApiCatalogo.AppServicesExtensions;
 using ApiCatalogo.Context;
 using ApiCatalogo.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -73,19 +74,15 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// ------------------------------ ENDPOINTS ------------------------------
+#region ENDPOINTS
 app.MapAutenticacaoEndpoints();
 app.MapCategoriasEndpoints();
 app.MapProdutosEndpoints();
+#endregion
 
+var environment = app.Environment;
+app.UseExceptionHandling(environment).UseSwaggerMiddleware().UseAppCors();
 
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 app.UseAuthentication();
 app.UseAuthorization();
