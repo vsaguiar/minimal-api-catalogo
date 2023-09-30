@@ -8,6 +8,7 @@ public static class ProdutosEndpoints
 {
     public static void MapProdutosEndpoints(this WebApplication app)
     {
+        #region MapPost - Inclui um produto
         app.MapPost("/produtos", async (Produto produto, AppDbContext db) =>
         {
             db.Produtos.Add(produto);
@@ -15,11 +16,13 @@ public static class ProdutosEndpoints
 
             return Results.Created($"/produtos/{produto.ProdutoId}", produto);
         });
+        #endregion
 
-
+        #region MapGet - Consulta todos os produtos
         app.MapGet("/produtos", async (AppDbContext db) => await db.Produtos.ToListAsync()).WithTags("Produtos").RequireAuthorization();
+        #endregion
 
-
+        #region MapGet - Consulta um produto por ID
         app.MapGet("/produtos/{id:int}", async (int id, AppDbContext db) =>
         {
             return await db.Produtos.FindAsync(id)
@@ -27,8 +30,9 @@ public static class ProdutosEndpoints
                          ? Results.Ok(produto)
                          : Results.NotFound();
         });
-        
+        #endregion
 
+        #region MapPut - Atualiza um produto por ID
         app.MapPut("/produtos/{id:int}", async (int id, Produto produto, AppDbContext db) =>
         {
             if (produto.ProdutoId != id)
@@ -53,8 +57,9 @@ public static class ProdutosEndpoints
             await db.SaveChangesAsync();
             return Results.Ok(produtoDB);
         });
+        #endregion
 
-
+        #region MapDelete - Deleta um produto por ID
         app.MapDelete("/produtos/{id:int}", async (int id, AppDbContext db) =>
         {
             var produto = await db.Produtos.FindAsync(id);
@@ -67,5 +72,6 @@ public static class ProdutosEndpoints
             await db.SaveChangesAsync();
             return Results.NoContent();
         });
+        #endregion
     }
 }

@@ -8,6 +8,7 @@ public static class CategoriasEndpoints
 {
     public static void MapCategoriasEndpoints(this WebApplication app)
     {
+        #region MapPost - Inlcui uma categoria
         app.MapPost("/categorias", async (Categoria categoria, AppDbContext db) =>
         {
             db.Categorias.Add(categoria);
@@ -15,11 +16,13 @@ public static class CategoriasEndpoints
 
             return Results.Created($"/categorias/{categoria.CategoriaId}", categoria);
         });
+        #endregion
 
-
+        #region MapGet - Consulta todas as categorias
         app.MapGet("/categorias", async (AppDbContext db) => await db.Categorias.ToListAsync()).WithTags("Categorias").RequireAuthorization();
+        #endregion
 
-
+        #region MapGet - Consulta uma categoria por ID
         app.MapGet("/categorias/{id:int}", async (int id, AppDbContext db) =>
         {
             return await db.Categorias.FindAsync(id)
@@ -27,8 +30,9 @@ public static class CategoriasEndpoints
                          ? Results.Ok(categoria)
                          : Results.NotFound();
         });
+        #endregion
 
-
+        #region MapPut - Atualiza uma categoria por ID
         app.MapPut("/categorias/{id:int}", async (int id, Categoria categoria, AppDbContext db) =>
         {
             if (categoria.CategoriaId != id)
@@ -48,8 +52,9 @@ public static class CategoriasEndpoints
             await db.SaveChangesAsync();
             return Results.Ok(categoriaDB);
         });
+        #endregion
 
-
+        #region MapDelete - Deleta uma categoria por ID
         app.MapDelete("/categorias/{id:int}", async (int id, AppDbContext db) =>
         {
             var categoria = await db.Categorias.FindAsync(id);
@@ -62,5 +67,6 @@ public static class CategoriasEndpoints
             await db.SaveChangesAsync();
             return Results.NoContent();
         });
+        #endregion
     }
 }
