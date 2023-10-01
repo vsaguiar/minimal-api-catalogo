@@ -14,13 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 
-// Obtendo a string de conexão
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Incluindo o serviço no contexto
-builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-
-builder.Services.AddSingleton<ITokenService>(new TokenService());
 
 // Validando o token
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

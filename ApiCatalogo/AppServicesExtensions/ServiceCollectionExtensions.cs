@@ -1,4 +1,7 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using ApiCatalogo.Context;
+using ApiCatalogo.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace ApiCatalogo.AppServicesExtensions;
 
@@ -9,6 +12,7 @@ public static class ServiceCollectionExtensions
         builder.Services.AddSwagger();
         return builder;
     }
+
 
     public static IServiceCollection AddSwagger(this IServiceCollection services)
     {
@@ -44,4 +48,17 @@ public static class ServiceCollectionExtensions
         });
         return services;
     }
+
+
+    public static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
+    {
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+        builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+        builder.Services.AddSingleton<ITokenService>(new TokenService());
+
+        return builder;
+    }
+
 }
