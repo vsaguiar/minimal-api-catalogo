@@ -1,24 +1,15 @@
 using ApiCatalogo.ApiEndpoints;
 using ApiCatalogo.AppServicesExtensions;
-using ApiCatalogo.Context;
-using ApiCatalogo.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-
-
-
-
-
-
+builder.AddApiSwagger();
+builder.AddPersistence();
+builder.Services.AddCors();
+builder.AddAutenticationJwt();
 
 var app = builder.Build();
 
